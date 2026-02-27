@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using MetadataEditor.Models;
 using MetadataEditor.Utils;
 using Prism.Mvvm;
@@ -9,6 +12,11 @@ public class MainWindowViewModel : BindableBase
 {
     private readonly AppVersionInfo appVersionInfo = new();
     private ImageItem selectedImageItem;
+
+    public MainWindowViewModel()
+    {
+        AddDummy();
+    }
 
     public string Title => appVersionInfo.Title;
 
@@ -23,5 +31,18 @@ public class MainWindowViewModel : BindableBase
     public void Add(string path)
     {
         ImageItems.Add(new ImageItem(path));
+    }
+
+    [Conditional("DEBUG")]
+    private void AddDummy()
+    {
+        var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        var testDataPath = "myFiles\\Tests\\RiderProjects\\MetadataEditor\\test1";
+        var path = Path.Combine(desktop, testDataPath);
+        var files = Directory.GetFiles(path, "*.png");
+        foreach (var file in files)
+        {
+            Add(file);
+        }
     }
 }
