@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using MetadataEditor.Core;
 using MetadataEditor.Models;
 using MetadataEditor.Utils;
@@ -38,6 +39,18 @@ public class MainWindowViewModel : BindableBase
         }
 
         MetadataWriter.Write(SelectedImageItem.FullPath, SelectedImageItem.MetadataText);
+    });
+
+    public DelegateCommand CopyToClipboardCommand => new DelegateCommand(() =>
+    {
+        if (SelectedImageItem == null)
+        {
+            return;
+        }
+
+        string[] fileNames = { SelectedImageItem.FullPath, };
+        var data = new DataObject(DataFormats.FileDrop, fileNames);
+        Clipboard.SetDataObject(data);
     });
 
     public void Add(string path)

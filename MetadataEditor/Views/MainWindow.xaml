@@ -41,6 +41,14 @@
             Grid.Column="0"
             ItemsSource="{Binding ImageItems}"
             SelectedItem="{Binding SelectedImageItem}">
+
+            <ListBox.InputBindings>
+                <KeyBinding
+                    Key="C"
+                    Command="{Binding CopyToClipboardCommand}"
+                    Modifiers="Control" />
+            </ListBox.InputBindings>
+
             <b:Interaction.Behaviors>
                 <behaviors:DropPngFilesToPathsBehavior />
             </b:Interaction.Behaviors>
@@ -66,6 +74,13 @@
             Grid.ColumnSpan="2"
             ItemsSource="{Binding ImageItems}"
             SelectedItem="{Binding SelectedImageItem}">
+
+            <ListBox.InputBindings>
+                <KeyBinding
+                    Key="C"
+                    Command="{Binding CopyToClipboardCommand}"
+                    Modifiers="Control" />
+            </ListBox.InputBindings>
 
             <b:Interaction.Behaviors>
                 <behaviors:ScrollSelectedItemIntoViewBehavior />
