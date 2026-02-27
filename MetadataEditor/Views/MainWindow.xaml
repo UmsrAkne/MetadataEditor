@@ -60,6 +60,10 @@
             ItemsSource="{Binding ImageItems}"
             SelectedItem="{Binding SelectedImageItem}">
 
+            <b:Interaction.Behaviors>
+                <behaviors:ScrollSelectedItemIntoViewBehavior />
+            </b:Interaction.Behaviors>
+
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
