@@ -31,7 +31,8 @@
         <ListBox
             Grid.Row="1"
             Grid.Column="0"
-            ItemsSource="{Binding ImageItems}">
+            ItemsSource="{Binding ImageItems}"
+            SelectedItem="{Binding SelectedImageItem}">
             <b:Interaction.Behaviors>
                 <behaviors:DropPngFilesToPathsBehavior />
             </b:Interaction.Behaviors>
@@ -45,6 +46,11 @@
             </ListBox.ItemTemplate>
 
         </ListBox>
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Text="{Binding SelectedImageItem.MetadataText}" />
     </Grid>
 
 </Window>

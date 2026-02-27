@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows.Media;
+using MetadataEditor.Core;
 
 namespace MetadataEditor.Models
 {
@@ -9,6 +10,8 @@ namespace MetadataEditor.Models
         {
             FullPath = path;
             FileName = Path.GetFileName(path);
+
+            MetadataText = PngMetadataReader.ReadPngTextMetadata(path);
         }
 
         public string FullPath { get; set; }
