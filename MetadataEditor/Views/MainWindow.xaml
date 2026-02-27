@@ -10,7 +10,7 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewModels="clr-namespace:MetadataEditor.ViewModels"
     Title="{Binding Title}"
-    Width="525"
+    Width="960"
     Height="350"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
@@ -24,7 +24,7 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="0.6*" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
@@ -47,10 +47,22 @@
 
         </ListBox>
 
-        <TextBlock
+        <TextBox
             Grid.Row="1"
             Grid.Column="1"
-            Text="{Binding SelectedImageItem.MetadataText}" />
+            Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Border
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Padding="5">
+            <Button
+                Width="150"
+                HorizontalAlignment="Right"
+                Command="{Binding SaveMetadataCommand}"
+                Content="Save" />
+        </Border>
     </Grid>
 
 </Window>

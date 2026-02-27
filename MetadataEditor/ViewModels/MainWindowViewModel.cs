@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using MetadataEditor.Core;
 using MetadataEditor.Models;
 using MetadataEditor.Utils;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace MetadataEditor.ViewModels;
@@ -27,6 +29,16 @@ public class MainWindowViewModel : BindableBase
         get => selectedImageItem;
         set => SetProperty(ref selectedImageItem, value);
     }
+
+    public DelegateCommand SaveMetadataCommand => new DelegateCommand(() =>
+    {
+        if (SelectedImageItem == null)
+        {
+            return;
+        }
+
+        MetadataWriter.Write(SelectedImageItem.FullPath, SelectedImageItem.MetadataText);
+    });
 
     public void Add(string path)
     {
