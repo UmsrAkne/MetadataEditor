@@ -16,6 +16,13 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 
+    <Window.InputBindings>
+        <KeyBinding
+            Key="S"
+            Command="{Binding SaveMetadataCommand}"
+            Modifiers="Control" />
+    </Window.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -132,10 +139,11 @@
             Grid.ColumnSpan="2"
             Padding="5">
             <Button
-                Width="150"
+                Width="Auto"
+                Padding="15,2"
                 HorizontalAlignment="Right"
                 Command="{Binding SaveMetadataCommand}"
-                Content="Save" />
+                Content="Save selected metadata (Ctrl + S)" />
         </Border>
     </Grid>
 
