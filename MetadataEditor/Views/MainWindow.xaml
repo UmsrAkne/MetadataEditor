@@ -47,6 +47,10 @@
                     Key="C"
                     Command="{Binding CopyToClipboardCommand}"
                     Modifiers="Control" />
+                <KeyBinding
+                    Key="V"
+                    Command="{Binding PasteFromClipboardCommand}"
+                    Modifiers="Control" />
             </ListBox.InputBindings>
 
             <b:Interaction.Behaviors>
@@ -79,6 +83,10 @@
                 <KeyBinding
                     Key="C"
                     Command="{Binding CopyToClipboardCommand}"
+                    Modifiers="Control" />
+                <KeyBinding
+                    Key="V"
+                    Command="{Binding PasteFromClipboardCommand}"
                     Modifiers="Control" />
             </ListBox.InputBindings>
 
