@@ -90,7 +90,7 @@ namespace MetadataEditor.Behaviors
                 foreach (var path in pngs)
                 {
                     fileList += $"{path}{Environment.NewLine}";
-                    viewModel.Paths.Add(path);
+                    viewModel.Add(path);
                 }
 
                 LogWriter.Write(fileList);

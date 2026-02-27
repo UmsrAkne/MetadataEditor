@@ -6,6 +6,7 @@
     xmlns:behaviors="clr-namespace:MetadataEditor.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:MetadataEditor.Models"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewModels="clr-namespace:MetadataEditor.ViewModels"
     Title="{Binding Title}"
@@ -30,10 +31,19 @@
         <ListBox
             Grid.Row="1"
             Grid.Column="0"
-            ItemsSource="{Binding Paths}">
+            ItemsSource="{Binding ImageItems}">
             <b:Interaction.Behaviors>
                 <behaviors:DropPngFilesToPathsBehavior />
             </b:Interaction.Behaviors>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:ImageItem}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FileName}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
         </ListBox>
     </Grid>
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using MetadataEditor.Models;
 using MetadataEditor.Utils;
 using Prism.Mvvm;
 
@@ -10,5 +11,10 @@ public class MainWindowViewModel : BindableBase
 
     public string Title => appVersionInfo.Title;
 
-    public ObservableCollection<string> Paths { get; set; } = new ();
+    public ObservableCollection<ImageItem> ImageItems { get; set; } = new ();
+
+    public void Add(string path)
+    {
+        ImageItems.Add(new ImageItem(path));
+    }
 }
