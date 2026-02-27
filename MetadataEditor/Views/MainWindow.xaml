@@ -60,6 +60,27 @@
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:ImageItem}">
                     <StackPanel Orientation="Horizontal">
+                        <Border
+                            Width="8"
+                            Height="8"
+                            Margin="4,0,10,0"
+                            VerticalAlignment="Center"
+                            CornerRadius="4">
+
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsModified}" Value="True">
+                                            <Setter Property="Background" Value="Coral" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding IsModified}" Value="False">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
                         <TextBlock Text="{Binding FileName}" />
                     </StackPanel>
                 </DataTemplate>
@@ -166,7 +187,8 @@
                 Padding="15,2"
                 HorizontalAlignment="Right"
                 Command="{Binding SaveMetadataCommand}"
-                Content="Save selected metadata (Ctrl + S)" />
+                Content="Save selected metadata (Ctrl + S)"
+                IsEnabled="{Binding SelectedImageItem.IsModified}" />
         </Border>
     </Grid>
 

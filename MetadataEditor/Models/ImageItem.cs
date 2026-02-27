@@ -9,6 +9,7 @@ namespace MetadataEditor.Models
     public class ImageItem : BindableBase
     {
         private string metadataText;
+        private bool isModified;
 
         public ImageItem(string path)
         {
@@ -19,6 +20,7 @@ namespace MetadataEditor.Models
             ImageSource = LoadBitmapImage(path);
 
             MetadataText = PngMetadataReader.ReadPngTextMetadata(path);
+            IsModified = false;
         }
 
         public string FullPath { get; set; }
@@ -27,7 +29,28 @@ namespace MetadataEditor.Models
 
         public ImageSource ImageSource { get; set; }
 
-        public string MetadataText { get => metadataText; set => SetProperty(ref metadataText, value); }
+        public string MetadataText
+        {
+            get => metadataText;
+            set
+            {
+                if (SetProperty(ref metadataText, value))
+                {
+                    IsModified = true;
+                }
+            }
+        }
+
+        public bool IsModified
+        {
+            get => isModified;
+            private set => SetProperty(ref isModified, value);
+        }
+
+        public void MarkAsSaved()
+        {
+            IsModified = false;
+        }
 
         private static ImageSource LoadBitmapImage(string path)
         {
