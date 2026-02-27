@@ -11,15 +11,23 @@
     xmlns:viewModels="clr-namespace:MetadataEditor.ViewModels"
     Title="{Binding Title}"
     Width="960"
-    Height="350"
+    Height="600"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
+
+    <Window.InputBindings>
+        <KeyBinding
+            Key="S"
+            Command="{Binding SaveMetadataCommand}"
+            Modifiers="Control" />
+    </Window.InputBindings>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -33,6 +41,18 @@
             Grid.Column="0"
             ItemsSource="{Binding ImageItems}"
             SelectedItem="{Binding SelectedImageItem}">
+
+            <ListBox.InputBindings>
+                <KeyBinding
+                    Key="C"
+                    Command="{Binding CopyToClipboardCommand}"
+                    Modifiers="Control" />
+                <KeyBinding
+                    Key="V"
+                    Command="{Binding PasteFromClipboardCommand}"
+                    Modifiers="Control" />
+            </ListBox.InputBindings>
+
             <b:Interaction.Behaviors>
                 <behaviors:DropPngFilesToPathsBehavior />
             </b:Interaction.Behaviors>
@@ -40,6 +60,27 @@
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:ImageItem}">
                     <StackPanel Orientation="Horizontal">
+                        <Border
+                            Width="8"
+                            Height="8"
+                            Margin="4,0,10,0"
+                            VerticalAlignment="Center"
+                            CornerRadius="4">
+
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsModified}" Value="True">
+                                            <Setter Property="Background" Value="Coral" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding IsModified}" Value="False">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
                         <TextBlock Text="{Binding FileName}" />
                     </StackPanel>
                 </DataTemplate>
@@ -52,16 +93,102 @@
             Grid.Column="1"
             Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Border
+        <ListBox
             Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            ItemsSource="{Binding ImageItems}"
+            SelectedItem="{Binding SelectedImageItem}">
+
+            <ListBox.InputBindings>
+                <KeyBinding
+                    Key="C"
+                    Command="{Binding CopyToClipboardCommand}"
+                    Modifiers="Control" />
+                <KeyBinding
+                    Key="V"
+                    Command="{Binding PasteFromClipboardCommand}"
+                    Modifiers="Control" />
+            </ListBox.InputBindings>
+
+            <b:Interaction.Behaviors>
+                <behaviors:ScrollSelectedItemIntoViewBehavior />
+            </b:Interaction.Behaviors>
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:ImageItem}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Image
+                            Grid.Row="0"
+                            Height="180"
+                            Source="{Binding ImageSource}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Width="240"
+                            Text="{Binding FileName}"
+                            TextAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border
+                                    x:Name="Bd"
+                                    Padding="4"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="2"
+                                    CornerRadius="4">
+                                    <ContentPresenter />
+                                </Border>
+
+                                <ControlTemplate.Triggers>
+                                    <!-- 通常選択 -->
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Bd" Property="BorderBrush" Value="#FF3B82F6" />
+                                        <Setter TargetName="Bd" Property="Background" Value="#223B82F6" />
+                                    </Trigger>
+
+                                    <!-- マウスホバー -->
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#11000000" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
+        <Border
+            Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Padding="5">
             <Button
-                Width="150"
+                Width="Auto"
+                Padding="15,2"
                 HorizontalAlignment="Right"
                 Command="{Binding SaveMetadataCommand}"
-                Content="Save" />
+                Content="Save selected metadata (Ctrl + S)"
+                IsEnabled="{Binding SelectedImageItem.IsModified}" />
         </Border>
     </Grid>
 

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Windows;
 using MetadataEditor.Core;
 using MetadataEditor.Models;
 using MetadataEditor.Utils;
@@ -38,6 +41,78 @@ public class MainWindowViewModel : BindableBase
         }
 
         MetadataWriter.Write(SelectedImageItem.FullPath, SelectedImageItem.MetadataText);
+        SelectedImageItem.MarkAsSaved();
+    });
+
+    public DelegateCommand CopyToClipboardCommand => new DelegateCommand(() =>
+    {
+        if (SelectedImageItem == null)
+        {
+            return;
+        }
+
+        string[] fileNames = { SelectedImageItem.FullPath, };
+        var data = new DataObject(DataFormats.FileDrop, fileNames);
+        Clipboard.SetDataObject(data);
+    });
+
+    // Paste image files from clipboard: create a non-conflicting copy next to the source and add to the list
+    public DelegateCommand PasteFromClipboardCommand => new DelegateCommand(() =>
+    {
+        try
+        {
+            if (!Clipboard.ContainsFileDropList())
+            {
+                return;
+            }
+
+            var files = Clipboard.GetFileDropList();
+            if (files.Count == 0)
+            {
+                return;
+            }
+
+            var imageExtensions = new[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif", ".tif", ".tiff", };
+            var imageFiles = files.Cast<string>()
+                .Where(f => !string.IsNullOrWhiteSpace(f))
+                .Where(f => imageExtensions.Contains(Path.GetExtension(f).ToLowerInvariant()))
+                .ToList();
+
+            foreach (var src in imageFiles)
+            {
+                try
+                {
+                    var dir = Path.GetDirectoryName(src);
+                    var name = Path.GetFileNameWithoutExtension(src);
+                    var ext = Path.GetExtension(src);
+
+                    // Base new name: original and timestamp
+                    var baseName = $"{name}_{DateTime.Now:MMdd_HHmmss_fff}";
+                    var dest = Path.Combine(dir!, baseName + ext);
+
+                    // Ensure uniqueness
+                    var i = 1;
+                    while (File.Exists(dest))
+                    {
+                        dest = Path.Combine(dir!, $"{baseName}_{i}{ext}");
+                        i++;
+                    }
+
+                    File.Copy(src, dest);
+
+                    // Add to a collection
+                    Add(dest);
+                }
+                catch (Exception ex)
+                {
+                    LogWriter.Write($"PasteFromClipboard failed for '{src}': {ex.Message}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            LogWriter.Write($"PasteFromClipboardCommand error: {ex.Message}");
+        }
     });
 
     public void Add(string path)
@@ -56,5 +131,7 @@ public class MainWindowViewModel : BindableBase
         {
             Add(file);
         }
+
+        ImageItems[4].MetadataText = $"{DateTime.Now.ToString(CultureInfo.InvariantCulture)}";
     }
 }
