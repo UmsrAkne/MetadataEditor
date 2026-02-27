@@ -11,7 +11,7 @@
     xmlns:viewModels="clr-namespace:MetadataEditor.ViewModels"
     Title="{Binding Title}"
     Width="960"
-    Height="350"
+    Height="600"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
@@ -20,6 +20,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -52,8 +53,42 @@
             Grid.Column="1"
             Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Border
+        <ListBox
             Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            ItemsSource="{Binding ImageItems}"
+            SelectedItem="{Binding SelectedImageItem}">
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:ImageItem}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Image
+                            Grid.Row="0"
+                            Height="180"
+                            Source="{Binding ImageSource}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Width="240"
+                            Text="{Binding FileName}"
+                            TextAlignment="Center" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Border
+            Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Padding="5">
