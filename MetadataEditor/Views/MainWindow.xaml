@@ -29,6 +29,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -189,6 +190,15 @@
                 Command="{Binding SaveMetadataCommand}"
                 Content="Save selected metadata (Ctrl + S)"
                 IsEnabled="{Binding SelectedImageItem.IsModified}" />
+        </Border>
+
+        <Border
+            Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Padding="5"
+            Background="WhiteSmoke">
+            <TextBlock Text="{Binding LogMessage}" />
         </Border>
     </Grid>
 
