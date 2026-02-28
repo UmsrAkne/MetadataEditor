@@ -95,6 +95,8 @@ namespace MetadataEditor.Behaviors
 
                 LogWriter.Write(fileList);
                 e.Handled = true;
+
+                viewModel.WriteLog($"Dropped {pngs.Count} files");
             }
             catch
             {

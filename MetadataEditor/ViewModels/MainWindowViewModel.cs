@@ -17,6 +17,7 @@ public class MainWindowViewModel : BindableBase
 {
     private readonly AppVersionInfo appVersionInfo = new();
     private ImageItem selectedImageItem;
+    private string logMessage;
 
     public MainWindowViewModel()
     {
@@ -33,6 +34,8 @@ public class MainWindowViewModel : BindableBase
         set => SetProperty(ref selectedImageItem, value);
     }
 
+    public string LogMessage { get => logMessage; set => SetProperty(ref logMessage, value); }
+
     public DelegateCommand SaveMetadataCommand => new DelegateCommand(() =>
     {
         if (SelectedImageItem == null)
@@ -42,6 +45,7 @@ public class MainWindowViewModel : BindableBase
 
         MetadataWriter.Write(SelectedImageItem.FullPath, SelectedImageItem.MetadataText);
         SelectedImageItem.MarkAsSaved();
+        WriteLog($"Saved metadata for '{SelectedImageItem.FullPath}'");
     });
 
     public DelegateCommand CopyToClipboardCommand => new DelegateCommand(() =>
@@ -54,6 +58,7 @@ public class MainWindowViewModel : BindableBase
         string[] fileNames = { SelectedImageItem.FullPath, };
         var data = new DataObject(DataFormats.FileDrop, fileNames);
         Clipboard.SetDataObject(data);
+        WriteLog($"Copied '{SelectedImageItem.FullPath}' to clipboard");
     });
 
     // Paste image files from clipboard: create a non-conflicting copy next to the source and add to the list
@@ -108,6 +113,8 @@ public class MainWindowViewModel : BindableBase
                     LogWriter.Write($"PasteFromClipboard failed for '{src}': {ex.Message}");
                 }
             }
+
+            WriteLog($"Pasted {imageFiles.Count} image files from clipboard");
         }
         catch (Exception ex)
         {
@@ -118,6 +125,12 @@ public class MainWindowViewModel : BindableBase
     public void Add(string path)
     {
         ImageItems.Add(new ImageItem(path));
+    }
+
+    public void WriteLog(string text)
+    {
+        LogMessage = $"{DateTime.Now:yyyy/MM/dd HH:mm:ss} {text}";
+        LogWriter.Write(text);
     }
 
     [Conditional("DEBUG")]

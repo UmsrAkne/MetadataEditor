@@ -10,6 +10,7 @@ namespace MetadataEditor.Models
     {
         private string metadataText;
         private bool isModified;
+        private string caption = string.Empty;
 
         public ImageItem(string path)
         {
@@ -46,6 +47,8 @@ namespace MetadataEditor.Models
             get => isModified;
             private set => SetProperty(ref isModified, value);
         }
+
+        public string Caption { get => caption; set => SetProperty(ref caption, value); }
 
         public void MarkAsSaved()
         {
