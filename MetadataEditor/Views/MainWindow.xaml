@@ -40,6 +40,8 @@
         <ListBox
             Grid.Row="1"
             Grid.Column="0"
+            HorizontalContentAlignment="Stretch"
+            AlternationCount="2"
             ItemsSource="{Binding ImageItems}"
             SelectedItem="{Binding SelectedImageItem}">
 
@@ -60,32 +62,53 @@
 
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:ImageItem}">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Border
+                                Width="8"
+                                Height="8"
+                                Margin="4,0,10,0"
+                                VerticalAlignment="Center"
+                                CornerRadius="4">
+
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsModified}" Value="True">
+                                                <Setter Property="Background" Value="Coral" />
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding IsModified}" Value="False">
+                                                <Setter Property="Background" Value="Transparent" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <TextBlock Text="{Binding FileName}" />
+                        </StackPanel>
+
                         <Border
-                            Width="8"
-                            Height="8"
-                            Margin="4,0,10,0"
-                            VerticalAlignment="Center"
-                            CornerRadius="4">
-
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsModified}" Value="True">
-                                            <Setter Property="Background" Value="Coral" />
-                                        </DataTrigger>
-
-                                        <DataTrigger Binding="{Binding IsModified}" Value="False">
-                                            <Setter Property="Background" Value="Transparent" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
+                            Margin="35,3,10,2"
+                            BorderBrush="DarkGray"
+                            BorderThickness="1"
+                            CornerRadius="3">
+                            <TextBox BorderThickness="0" Text="{Binding Caption}" />
                         </Border>
-                        <TextBlock Text="{Binding FileName}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0,5" />
+                    <Style.Triggers>
+                        <Trigger Property="ListBox.AlternationIndex" Value="0">
+                            <Setter Property="Background" Value="Lavender" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
 
         </ListBox>
 
@@ -127,6 +150,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <Image
@@ -138,6 +162,14 @@
                             Width="240"
                             Text="{Binding FileName}"
                             TextAlignment="Center" />
+                        <Border
+                            Grid.Row="2"
+                            Margin="5,0"
+                            BorderBrush="DarkGray"
+                            BorderThickness="1"
+                            CornerRadius="3">
+                            <TextBox BorderThickness="0" Text="{Binding Caption}" />
+                        </Border>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
