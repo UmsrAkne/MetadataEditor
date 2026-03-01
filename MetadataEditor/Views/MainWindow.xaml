@@ -89,36 +89,52 @@
 
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:ImageItem}">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Border
-                                    Width="8"
-                                    Height="8"
-                                    Margin="4,0,10,0"
-                                    VerticalAlignment="Center"
-                                    CornerRadius="4">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
 
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsModified}" Value="True">
-                                                    <Setter Property="Background" Value="Coral" />
-                                                </DataTrigger>
-
-                                                <DataTrigger Binding="{Binding IsModified}" Value="False">
-                                                    <Setter Property="Background" Value="Transparent" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
-                                </Border>
-                                <TextBlock
-                                    FontSize="{StaticResource CommonFontSize}"
-                                    Foreground="{StaticResource AppForegroundBrush}"
-                                    Text="{Binding FileName}" />
-                            </StackPanel>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
 
                             <Border
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                Width="6"
+                                Height="40"
+                                Margin="4,0,10,0"
+                                VerticalAlignment="Center"
+                                CornerRadius="4">
+
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsModified}" Value="True">
+                                                <Setter Property="Background" Value="Coral" />
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding IsModified}" Value="False">
+                                                <Setter Property="Background" Value="Transparent" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                FontSize="{StaticResource CommonFontSize}"
+                                Foreground="{StaticResource AppForegroundBrush}"
+                                Text="{Binding FileName}" />
+
+                            <Border
+                                Grid.Row="1"
+                                Grid.Column="1"
                                 MinWidth="100"
                                 Margin="35,3,10,2"
                                 Padding="2,1"
@@ -132,7 +148,7 @@
                                     Foreground="{StaticResource AppForegroundBrush}"
                                     Text="{Binding Caption}" />
                             </Border>
-                        </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
 
