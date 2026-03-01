@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:MetadataEditor.Models"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:MetadataEditor.ViewModels"
     Title="{Binding Title}"
     Width="960"
@@ -15,6 +16,11 @@
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
+
+    <Window.Resources>
+        <system:Double x:Key="CommonFontSize">15</system:Double>
+        <SolidColorBrush x:Key="AppForegroundBrush" Color="Black" />
+    </Window.Resources>
 
     <Window.InputBindings>
         <KeyBinding
@@ -84,7 +90,10 @@
                                     </Style>
                                 </Border.Style>
                             </Border>
-                            <TextBlock Text="{Binding FileName}" />
+                            <TextBlock
+                                FontSize="{StaticResource CommonFontSize}"
+                                Foreground="{StaticResource AppForegroundBrush}"
+                                Text="{Binding FileName}" />
                         </StackPanel>
 
                         <Border
@@ -97,6 +106,8 @@
                             <TextBox
                                 Background="Transparent"
                                 BorderThickness="0"
+                                FontSize="{StaticResource CommonFontSize}"
+                                Foreground="{StaticResource AppForegroundBrush}"
                                 Text="{Binding Caption}" />
                         </Border>
                     </StackPanel>
@@ -121,6 +132,8 @@
             Grid.Row="1"
             Grid.Column="1"
             Padding="2"
+            FontSize="{StaticResource CommonFontSize}"
+            Foreground="{StaticResource AppForegroundBrush}"
             Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}" />
 
         <ListBox
@@ -166,6 +179,8 @@
                         <TextBlock
                             Grid.Row="1"
                             Width="240"
+                            FontSize="{StaticResource CommonFontSize}"
+                            Foreground="{StaticResource AppForegroundBrush}"
                             Text="{Binding FileName}"
                             TextAlignment="Center" />
                         <Border
@@ -229,8 +244,14 @@
                 Padding="15,2"
                 HorizontalAlignment="Right"
                 Command="{Binding SaveMetadataCommand}"
-                Content="Save selected metadata (Ctrl + S)"
-                IsEnabled="{Binding SelectedImageItem.IsModified}" />
+                IsEnabled="{Binding SelectedImageItem.IsModified}">
+                <Button.Content>
+                    <TextBlock
+                        FontSize="{StaticResource CommonFontSize}"
+                        Foreground="{StaticResource AppForegroundBrush}"
+                        Text="Save selected metadata (Ctrl + S)" />
+                </Button.Content>
+            </Button>
         </Border>
 
         <Border
@@ -239,7 +260,10 @@
             Grid.ColumnSpan="2"
             Padding="5"
             Background="WhiteSmoke">
-            <TextBlock Text="{Binding LogMessage}" />
+            <TextBlock
+                FontSize="{StaticResource CommonFontSize}"
+                Foreground="{StaticResource AppForegroundBrush}"
+                Text="{Binding LogMessage}" />
         </Border>
     </Grid>
 
