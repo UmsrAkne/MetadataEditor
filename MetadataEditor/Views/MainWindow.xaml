@@ -29,7 +29,7 @@
             Modifiers="Control" />
     </Window.InputBindings>
 
-    <Grid>
+    <Grid Margin="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
