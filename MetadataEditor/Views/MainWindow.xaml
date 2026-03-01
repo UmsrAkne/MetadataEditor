@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:MetadataEditor.Models"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:MetadataEditor.ViewModels"
     Title="{Binding Title}"
     Width="960"
@@ -16,6 +17,11 @@
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
 
+    <Window.Resources>
+        <system:Double x:Key="CommonFontSize">15</system:Double>
+        <SolidColorBrush x:Key="AppForegroundBrush" Color="Black" />
+    </Window.Resources>
+
     <Window.InputBindings>
         <KeyBinding
             Key="S"
@@ -23,7 +29,7 @@
             Modifiers="Control" />
     </Window.InputBindings>
 
-    <Grid>
+    <Grid Margin="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -37,35 +43,69 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <ListBox
-            Grid.Row="1"
-            Grid.Column="0"
-            AlternationCount="2"
-            ItemsSource="{Binding ImageItems}"
-            SelectedItem="{Binding SelectedImageItem}">
+        <DockPanel Grid.Row="1" Grid.Column="0">
 
-            <ListBox.InputBindings>
-                <KeyBinding
-                    Key="C"
-                    Command="{Binding CopyToClipboardCommand}"
-                    Modifiers="Control" />
-                <KeyBinding
-                    Key="V"
-                    Command="{Binding PasteFromClipboardCommand}"
-                    Modifiers="Control" />
-            </ListBox.InputBindings>
+            <!-- ソート設定エリア -->
+            <Border Padding="4" DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,5,0"
+                        FontSize="{StaticResource CommonFontSize}"
+                        Foreground="{StaticResource AppForegroundBrush}"
+                        Text="Sort criteria : " />
+                    <ComboBox
+                        Width="220"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{Binding SortOptions}"
+                        SelectedItem="{Binding SelectedSortKey}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding SortCommand}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
+            </Border>
 
-            <b:Interaction.Behaviors>
-                <behaviors:DropPngFilesToPathsBehavior />
-            </b:Interaction.Behaviors>
+            <ListBox
+                AlternationCount="2"
+                ItemsSource="{Binding ImageItems}"
+                SelectedItem="{Binding SelectedImageItem}">
 
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:ImageItem}">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                <ListBox.InputBindings>
+                    <KeyBinding
+                        Key="C"
+                        Command="{Binding CopyToClipboardCommand}"
+                        Modifiers="Control" />
+                    <KeyBinding
+                        Key="V"
+                        Command="{Binding PasteFromClipboardCommand}"
+                        Modifiers="Control" />
+                </ListBox.InputBindings>
+
+                <b:Interaction.Behaviors>
+                    <behaviors:DropPngFilesToPathsBehavior />
+                </b:Interaction.Behaviors>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:ImageItem}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
                             <Border
-                                Width="8"
-                                Height="8"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                Width="6"
+                                Height="40"
                                 Margin="4,0,10,0"
                                 VerticalAlignment="Center"
                                 CornerRadius="4">
@@ -84,43 +124,56 @@
                                     </Style>
                                 </Border.Style>
                             </Border>
-                            <TextBlock Text="{Binding FileName}" />
-                        </StackPanel>
 
-                        <Border
-                            MinWidth="100"
-                            Margin="35,3,10,2"
-                            Padding="2,1"
-                            BorderBrush="DarkGray"
-                            BorderThickness="1"
-                            CornerRadius="3">
-                            <TextBox
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Text="{Binding Caption}" />
-                        </Border>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                FontSize="{StaticResource CommonFontSize}"
+                                Foreground="{StaticResource AppForegroundBrush}"
+                                Text="{Binding FileName}" />
 
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Padding" Value="0,5" />
-                    <Style.Triggers>
-                        <Trigger Property="ListBox.AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="SeaShell" />
-                            <Setter Property="BorderBrush" Value="Silver" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.ItemContainerStyle>
+                            <Border
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                MinWidth="100"
+                                Margin="35,3,10,2"
+                                Padding="2,1"
+                                BorderBrush="DarkGray"
+                                BorderThickness="1"
+                                CornerRadius="3">
+                                <TextBox
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="{StaticResource CommonFontSize}"
+                                    Foreground="{StaticResource AppForegroundBrush}"
+                                    Text="{Binding Caption}" />
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
 
-        </ListBox>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="0,5" />
+                        <Style.Triggers>
+                            <Trigger Property="ListBox.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="SeaShell" />
+                                <Setter Property="BorderBrush" Value="Silver" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
+            </ListBox>
+
+        </DockPanel>
 
         <TextBox
             Grid.Row="1"
             Grid.Column="1"
             Padding="2"
+            FontSize="{StaticResource CommonFontSize}"
+            Foreground="{StaticResource AppForegroundBrush}"
             Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}" />
 
         <ListBox
@@ -166,6 +219,8 @@
                         <TextBlock
                             Grid.Row="1"
                             Width="240"
+                            FontSize="{StaticResource CommonFontSize}"
+                            Foreground="{StaticResource AppForegroundBrush}"
                             Text="{Binding FileName}"
                             TextAlignment="Center" />
                         <Border
@@ -229,8 +284,14 @@
                 Padding="15,2"
                 HorizontalAlignment="Right"
                 Command="{Binding SaveMetadataCommand}"
-                Content="Save selected metadata (Ctrl + S)"
-                IsEnabled="{Binding SelectedImageItem.IsModified}" />
+                IsEnabled="{Binding SelectedImageItem.IsModified}">
+                <Button.Content>
+                    <TextBlock
+                        FontSize="{StaticResource CommonFontSize}"
+                        Foreground="{StaticResource AppForegroundBrush}"
+                        Text="Save selected metadata (Ctrl + S)" />
+                </Button.Content>
+            </Button>
         </Border>
 
         <Border
@@ -239,7 +300,10 @@
             Grid.ColumnSpan="2"
             Padding="5"
             Background="WhiteSmoke">
-            <TextBlock Text="{Binding LogMessage}" />
+            <TextBlock
+                FontSize="{StaticResource CommonFontSize}"
+                Foreground="{StaticResource AppForegroundBrush}"
+                Text="{Binding LogMessage}" />
         </Border>
     </Grid>
 
