@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 using MetadataEditor.Core;
 using MetadataEditor.Models;
 using MetadataEditor.Utils;
 using Prism.Commands;
 using Prism.Mvvm;
+using SortKey = MetadataEditor.Models.SortKey;
 
 namespace MetadataEditor.ViewModels;
 
@@ -18,9 +21,13 @@ public class MainWindowViewModel : BindableBase
     private readonly AppVersionInfo appVersionInfo = new();
     private ImageItem selectedImageItem;
     private string logMessage;
+    private SortKey selectedSortKey;
 
     public MainWindowViewModel()
     {
+        // default sort
+        SelectedSortKey = SortKey.FileNameAsc;
+        ApplySort();
         AddDummy();
     }
 
@@ -33,6 +40,16 @@ public class MainWindowViewModel : BindableBase
         get => selectedImageItem;
         set => SetProperty(ref selectedImageItem, value);
     }
+
+    public SortKey[] SortOptions => Enum.GetValues<SortKey>();
+
+    public SortKey SelectedSortKey
+    {
+        get => selectedSortKey;
+        set => SetProperty(ref selectedSortKey, value);
+    }
+
+    public DelegateCommand SortCommand => new DelegateCommand(ApplySort);
 
     public string LogMessage { get => logMessage; set => SetProperty(ref logMessage, value); }
 
@@ -131,6 +148,45 @@ public class MainWindowViewModel : BindableBase
     {
         LogMessage = $"{DateTime.Now:yyyy/MM/dd HH:mm:ss} {text}";
         LogWriter.Write(text);
+    }
+
+    private void ApplySort()
+    {
+        var view = CollectionViewSource.GetDefaultView(ImageItems);
+        if (view == null)
+        {
+            return;
+        }
+
+        using (view.DeferRefresh())
+        {
+            view.SortDescriptions.Clear();
+            switch (SelectedSortKey)
+            {
+                case SortKey.FileNameAsc:
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.FileName), ListSortDirection.Ascending));
+                    break;
+                case SortKey.FileNameDesc:
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.FileName), ListSortDirection.Descending));
+                    break;
+                case SortKey.ModifiedFirst:
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.IsModified), ListSortDirection.Descending));
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.FileName), ListSortDirection.Ascending));
+                    break;
+                case SortKey.ModifiedLast:
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.IsModified), ListSortDirection.Ascending));
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.FileName), ListSortDirection.Ascending));
+                    break;
+                case SortKey.CaptionAsc:
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.Caption), ListSortDirection.Ascending));
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.FileName), ListSortDirection.Ascending));
+                    break;
+                case SortKey.CaptionDesc:
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.Caption), ListSortDirection.Descending));
+                    view.SortDescriptions.Add(new SortDescription(nameof(ImageItem.FileName), ListSortDirection.Ascending));
+                    break;
+            }
+        }
     }
 
     [Conditional("DEBUG")]

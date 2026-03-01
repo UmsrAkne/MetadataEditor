@@ -43,90 +43,114 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <ListBox
-            Grid.Row="1"
-            Grid.Column="0"
-            AlternationCount="2"
-            ItemsSource="{Binding ImageItems}"
-            SelectedItem="{Binding SelectedImageItem}">
+        <DockPanel Grid.Row="1" Grid.Column="0">
 
-            <ListBox.InputBindings>
-                <KeyBinding
-                    Key="C"
-                    Command="{Binding CopyToClipboardCommand}"
-                    Modifiers="Control" />
-                <KeyBinding
-                    Key="V"
-                    Command="{Binding PasteFromClipboardCommand}"
-                    Modifiers="Control" />
-            </ListBox.InputBindings>
+            <!-- ソート設定エリア -->
+            <Border Padding="4" DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,5,0"
+                        FontSize="{StaticResource CommonFontSize}"
+                        Foreground="{StaticResource AppForegroundBrush}"
+                        Text="Sort criteria : " />
+                    <ComboBox
+                        Width="220"
+                        HorizontalAlignment="Left"
+                        ItemsSource="{Binding SortOptions}"
+                        SelectedItem="{Binding SelectedSortKey}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="SelectionChanged">
+                                <b:InvokeCommandAction Command="{Binding SortCommand}" />
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
+            </Border>
 
-            <b:Interaction.Behaviors>
-                <behaviors:DropPngFilesToPathsBehavior />
-            </b:Interaction.Behaviors>
+            <ListBox
+                AlternationCount="2"
+                ItemsSource="{Binding ImageItems}"
+                SelectedItem="{Binding SelectedImageItem}">
 
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:ImageItem}">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                <ListBox.InputBindings>
+                    <KeyBinding
+                        Key="C"
+                        Command="{Binding CopyToClipboardCommand}"
+                        Modifiers="Control" />
+                    <KeyBinding
+                        Key="V"
+                        Command="{Binding PasteFromClipboardCommand}"
+                        Modifiers="Control" />
+                </ListBox.InputBindings>
+
+                <b:Interaction.Behaviors>
+                    <behaviors:DropPngFilesToPathsBehavior />
+                </b:Interaction.Behaviors>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:ImageItem}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Border
+                                    Width="8"
+                                    Height="8"
+                                    Margin="4,0,10,0"
+                                    VerticalAlignment="Center"
+                                    CornerRadius="4">
+
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsModified}" Value="True">
+                                                    <Setter Property="Background" Value="Coral" />
+                                                </DataTrigger>
+
+                                                <DataTrigger Binding="{Binding IsModified}" Value="False">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
+                                <TextBlock
+                                    FontSize="{StaticResource CommonFontSize}"
+                                    Foreground="{StaticResource AppForegroundBrush}"
+                                    Text="{Binding FileName}" />
+                            </StackPanel>
+
                             <Border
-                                Width="8"
-                                Height="8"
-                                Margin="4,0,10,0"
-                                VerticalAlignment="Center"
-                                CornerRadius="4">
-
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsModified}" Value="True">
-                                                <Setter Property="Background" Value="Coral" />
-                                            </DataTrigger>
-
-                                            <DataTrigger Binding="{Binding IsModified}" Value="False">
-                                                <Setter Property="Background" Value="Transparent" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
+                                MinWidth="100"
+                                Margin="35,3,10,2"
+                                Padding="2,1"
+                                BorderBrush="DarkGray"
+                                BorderThickness="1"
+                                CornerRadius="3">
+                                <TextBox
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="{StaticResource CommonFontSize}"
+                                    Foreground="{StaticResource AppForegroundBrush}"
+                                    Text="{Binding Caption}" />
                             </Border>
-                            <TextBlock
-                                FontSize="{StaticResource CommonFontSize}"
-                                Foreground="{StaticResource AppForegroundBrush}"
-                                Text="{Binding FileName}" />
                         </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
 
-                        <Border
-                            MinWidth="100"
-                            Margin="35,3,10,2"
-                            Padding="2,1"
-                            BorderBrush="DarkGray"
-                            BorderThickness="1"
-                            CornerRadius="3">
-                            <TextBox
-                                Background="Transparent"
-                                BorderThickness="0"
-                                FontSize="{StaticResource CommonFontSize}"
-                                Foreground="{StaticResource AppForegroundBrush}"
-                                Text="{Binding Caption}" />
-                        </Border>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="0,5" />
+                        <Style.Triggers>
+                            <Trigger Property="ListBox.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="SeaShell" />
+                                <Setter Property="BorderBrush" Value="Silver" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
 
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Padding" Value="0,5" />
-                    <Style.Triggers>
-                        <Trigger Property="ListBox.AlternationIndex" Value="0">
-                            <Setter Property="Background" Value="SeaShell" />
-                            <Setter Property="BorderBrush" Value="Silver" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.ItemContainerStyle>
+            </ListBox>
 
-        </ListBox>
+        </DockPanel>
 
         <TextBox
             Grid.Row="1"
