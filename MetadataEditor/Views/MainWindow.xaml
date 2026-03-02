@@ -172,9 +172,11 @@
             Grid.Row="1"
             Grid.Column="1"
             Padding="2"
+            AcceptsReturn="True"
             FontSize="{StaticResource CommonFontSize}"
             Foreground="{StaticResource AppForegroundBrush}"
-            Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}"
+            TextWrapping="Wrap" />
 
         <ListBox
             Grid.Row="2"
