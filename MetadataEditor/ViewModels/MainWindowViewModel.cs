@@ -202,5 +202,7 @@ public class MainWindowViewModel : BindableBase
         }
 
         ImageItems[4].MetadataText = $"{DateTime.Now.ToString(CultureInfo.InvariantCulture)}";
+
+        ImageItems[1].Diffs.Add(new Diff() { Key = "testKey", Value = "testValue \n value", });
     }
 }

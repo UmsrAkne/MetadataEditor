@@ -108,6 +108,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <Grid.ColumnDefinitions>
@@ -117,7 +118,7 @@
 
                             <Border
                                 Grid.Row="0"
-                                Grid.RowSpan="2"
+                                Grid.RowSpan="3"
                                 Grid.Column="0"
                                 Width="6"
                                 Height="40"
@@ -163,6 +164,54 @@
                                     Foreground="{StaticResource AppForegroundBrush}"
                                     Text="{Binding Caption}" />
                             </Border>
+
+                            <ItemsControl
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="35,0,0,0"
+                                ItemsSource="{Binding Diffs}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:Diff}">
+                                        <StackPanel Margin="0,5">
+                                            <DockPanel>
+                                                <TextBlock
+                                                    Width="50"
+                                                    Padding="2"
+                                                    FontSize="{StaticResource CommonFontSize}"
+                                                    Foreground="{StaticResource AppForegroundBrush}"
+                                                    Text="Key : " />
+
+                                                <TextBox
+                                                    Padding="2"
+                                                    Background="{StaticResource ControlBackgroundBrush}"
+                                                    BorderThickness="0"
+                                                    FontSize="{StaticResource CommonFontSize}"
+                                                    Foreground="{StaticResource AppForegroundBrush}"
+                                                    Text="{Binding Key, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+                                            </DockPanel>
+
+                                            <DockPanel>
+                                                <TextBlock
+                                                    Width="50"
+                                                    Padding="2"
+                                                    FontSize="{StaticResource CommonFontSize}"
+                                                    Foreground="{StaticResource AppForegroundBrush}"
+                                                    Text="Value : " />
+
+                                                <TextBox
+                                                    Margin="0,5,0,0"
+                                                    Padding="2"
+                                                    Background="{StaticResource ControlBackgroundBrush}"
+                                                    BorderThickness="0"
+                                                    FontSize="{StaticResource CommonFontSize}"
+                                                    Foreground="{StaticResource AppForegroundBrush}"
+                                                    Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+
+                                            </DockPanel>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
