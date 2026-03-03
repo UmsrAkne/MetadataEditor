@@ -270,17 +270,92 @@
 
         </DockPanel>
 
-        <TextBox
-            Grid.Row="1"
-            Grid.Column="1"
-            Padding="2"
-            AcceptsReturn="True"
-            Background="{StaticResource ControlBackgroundBrush}"
-            BorderBrush="{StaticResource BorderBrushDark}"
-            FontSize="{StaticResource CommonFontSize}"
-            Foreground="{StaticResource AppForegroundBrush}"
-            Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}"
-            TextWrapping="Wrap" />
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBox
+                Grid.Row="0"
+                Padding="2"
+                AcceptsReturn="True"
+                Background="{StaticResource ControlBackgroundBrush}"
+                BorderBrush="{StaticResource BorderBrushDark}"
+                FontSize="{StaticResource CommonFontSize}"
+                Foreground="{StaticResource AppForegroundBrush}"
+                Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="Wrap" />
+
+            <Border
+                Grid.Row="1"
+                Background="{StaticResource AlternationBackgroundBrush}"
+                DockPanel.Dock="Bottom">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Button
+                        Grid.Row="0"
+                        Width="200"
+                        Margin="2"
+                        Padding="4"
+                        Command="{Binding AddDiffCommand}"
+                        Content="Add diff" />
+
+                    <ScrollViewer Grid.Row="1" MaxHeight="250">
+                        <ItemsControl Margin="35,0,0,0" ItemsSource="{Binding SelectedImageItem.Diffs}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:Diff}">
+                                    <StackPanel Margin="0,5">
+                                        <DockPanel>
+                                            <TextBlock
+                                                Width="50"
+                                                Padding="2"
+                                                FontSize="{StaticResource CommonFontSize}"
+                                                Foreground="{StaticResource AppForegroundBrush}"
+                                                Text="Key : " />
+
+                                            <TextBox
+                                                Padding="2"
+                                                Background="{StaticResource ControlBackgroundBrush}"
+                                                BorderThickness="0"
+                                                FontSize="{StaticResource CommonFontSize}"
+                                                Foreground="{StaticResource AppForegroundBrush}"
+                                                Text="{Binding Key, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+                                        </DockPanel>
+
+                                        <DockPanel>
+                                            <TextBlock
+                                                Width="50"
+                                                Padding="2"
+                                                FontSize="{StaticResource CommonFontSize}"
+                                                Foreground="{StaticResource AppForegroundBrush}"
+                                                Text="Value : " />
+
+                                            <TextBox
+                                                Margin="0,5,0,0"
+                                                Padding="2"
+                                                Background="{StaticResource ControlBackgroundBrush}"
+                                                BorderThickness="0"
+                                                FontSize="{StaticResource CommonFontSize}"
+                                                Foreground="{StaticResource AppForegroundBrush}"
+                                                Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Delay=500}" />
+
+                                        </DockPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                </Grid>
+
+            </Border>
+        </Grid>
 
         <ListBox
             Grid.Row="2"

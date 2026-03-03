@@ -139,6 +139,16 @@ public class MainWindowViewModel : BindableBase
         }
     });
 
+    public DelegateCommand AddDiffCommand => new DelegateCommand(() =>
+    {
+        if (SelectedImageItem == null)
+        {
+            return;
+        }
+
+        SelectedImageItem.Diffs.Add(new Diff());
+    });
+
     public void Add(string path)
     {
         ImageItems.Add(new ImageItem(path));
