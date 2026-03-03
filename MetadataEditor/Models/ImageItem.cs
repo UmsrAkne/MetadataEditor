@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MetadataEditor.Core;
@@ -49,6 +50,8 @@ namespace MetadataEditor.Models
         }
 
         public string Caption { get => caption; set => SetProperty(ref caption, value); }
+
+        public ObservableCollection<Diff> Diffs { get; set; } = new ();
 
         public void MarkAsSaved()
         {
