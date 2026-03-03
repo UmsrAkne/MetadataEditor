@@ -60,7 +60,7 @@ public class MainWindowViewModel : BindableBase
             return;
         }
 
-        MetadataWriter.Write(SelectedImageItem.FullPath, SelectedImageItem.MetadataText);
+        MetadataWriter.Write(SelectedImageItem.FullPath, SelectedImageItem.MetadataText, SelectedImageItem.Diffs);
         SelectedImageItem.MarkAsSaved();
         WriteLog($"Saved metadata for '{SelectedImageItem.FullPath}'");
     });
@@ -139,6 +139,16 @@ public class MainWindowViewModel : BindableBase
         }
     });
 
+    public DelegateCommand AddDiffCommand => new DelegateCommand(() =>
+    {
+        if (SelectedImageItem == null)
+        {
+            return;
+        }
+
+        SelectedImageItem.Diffs.Add(new Diff());
+    });
+
     public void Add(string path)
     {
         ImageItems.Add(new ImageItem(path));
@@ -202,5 +212,7 @@ public class MainWindowViewModel : BindableBase
         }
 
         ImageItems[4].MetadataText = $"{DateTime.Now.ToString(CultureInfo.InvariantCulture)}";
+
+        ImageItems[1].Diffs.Add(new Diff() { Key = "testKey", Value = "testValue \n value", });
     }
 }
