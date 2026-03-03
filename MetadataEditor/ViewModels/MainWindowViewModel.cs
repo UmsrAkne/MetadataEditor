@@ -60,7 +60,7 @@ public class MainWindowViewModel : BindableBase
             return;
         }
 
-        MetadataWriter.Write(SelectedImageItem.FullPath, SelectedImageItem.MetadataText);
+        MetadataWriter.Write(SelectedImageItem.FullPath, SelectedImageItem.MetadataText, SelectedImageItem.Diffs);
         SelectedImageItem.MarkAsSaved();
         WriteLog($"Saved metadata for '{SelectedImageItem.FullPath}'");
     });
