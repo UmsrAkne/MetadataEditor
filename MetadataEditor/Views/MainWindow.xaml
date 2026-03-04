@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:behaviors="clr-namespace:MetadataEditor.Behaviors"
+    xmlns:converters="clr-namespace:MetadataEditor.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:MetadataEditor.Models"
@@ -30,6 +31,8 @@
         <SolidColorBrush x:Key="AccentBrush" Color="#3B82F6" />
         <SolidColorBrush x:Key="AccentBackgroundBrush" Color="#223B82F6" />
         <SolidColorBrush x:Key="HoverBrush" Color="#22FFFFFF" />
+
+        <converters:MetadataColorConverter x:Key="MetadataColorConverter" />
     </Window.Resources>
 
     <Window.InputBindings>
@@ -173,8 +176,7 @@
                                 Margin="35,4,0,4"
                                 Padding="2"
                                 HorizontalAlignment="Left"
-                                BorderBrush="White"
-                                BorderThickness="3"
+                                Background="{Binding MetadataText, Converter={StaticResource MetadataColorConverter}}"
                                 CornerRadius="4">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -190,6 +192,7 @@
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     FontSize="{StaticResource CommonFontSize}"
+                                    FontWeight="Bold"
                                     Foreground="{StaticResource AppForegroundBrush}"
                                     Text="Metadata" />
                             </Border>
