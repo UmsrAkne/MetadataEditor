@@ -398,6 +398,27 @@
                             Grid.Row="0"
                             Height="180"
                             Source="{Binding ImageSource}" />
+
+
+                        <Border
+                            Grid.Row="0"
+                            Width="100"
+                            Margin="3"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Background="{StaticResource AlternationBackgroundBrush}"
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Opacity="0.85">
+
+                            <TextBlock
+                                Padding="4,2"
+                                HorizontalAlignment="Center"
+                                FontSize="{StaticResource CommonFontSize}"
+                                Foreground="{StaticResource AppForegroundBrush}"
+                                Text="{Binding Resolution}" />
+                        </Border>
                         <TextBlock
                             Grid.Row="1"
                             Width="240"

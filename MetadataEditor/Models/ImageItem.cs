@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -20,6 +21,10 @@ namespace MetadataEditor.Models
 
             // Load image into memory without locking the file
             ImageSource = LoadBitmapImage(path);
+            if (ImageSource is BitmapImage bitmap)
+            {
+                Resolution = $"{bitmap.PixelWidth} x {bitmap.PixelHeight}";
+            }
 
             MetadataText = PngMetadataReader.ReadPngTextMetadata(path);
             IsModified = false;
@@ -50,6 +55,8 @@ namespace MetadataEditor.Models
         }
 
         public string Caption { get => caption; set => SetProperty(ref caption, value); }
+
+        public string Resolution { get; set; } = string.Empty;
 
         public ObservableCollection<Diff> Diffs { get; set; } = new ();
 
