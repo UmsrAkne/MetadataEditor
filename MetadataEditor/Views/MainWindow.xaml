@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:behaviors="clr-namespace:MetadataEditor.Behaviors"
+    xmlns:converters="clr-namespace:MetadataEditor.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:MetadataEditor.Models"
@@ -12,7 +13,7 @@
     xmlns:viewModels="clr-namespace:MetadataEditor.ViewModels"
     Title="{Binding Title}"
     Width="960"
-    Height="600"
+    Height="800"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
@@ -30,6 +31,8 @@
         <SolidColorBrush x:Key="AccentBrush" Color="#3B82F6" />
         <SolidColorBrush x:Key="AccentBackgroundBrush" Color="#223B82F6" />
         <SolidColorBrush x:Key="HoverBrush" Color="#22FFFFFF" />
+
+        <converters:MetadataColorConverter x:Key="MetadataColorConverter" />
     </Window.Resources>
 
     <Window.InputBindings>
@@ -109,6 +112,7 @@
                                 <RowDefinition />
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
                             <Grid.ColumnDefinitions>
@@ -165,8 +169,36 @@
                                     Text="{Binding Caption}" />
                             </Border>
 
-                            <ItemsControl
+                            <Border
                                 Grid.Row="2"
+                                Grid.Column="1"
+                                Width="90"
+                                Margin="35,4,0,4"
+                                Padding="2"
+                                HorizontalAlignment="Left"
+                                Background="{Binding MetadataText, Converter={StaticResource MetadataColorConverter}}"
+                                CornerRadius="4">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding HasMetadata}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    FontSize="{StaticResource CommonFontSize}"
+                                    FontWeight="Bold"
+                                    Foreground="{StaticResource AppForegroundBrush}"
+                                    Text="Metadata" />
+                            </Border>
+
+                            <ItemsControl
+                                Grid.Row="3"
                                 Grid.Column="1"
                                 Margin="35,0,0,0"
                                 ItemsSource="{Binding Diffs}">
@@ -201,6 +233,7 @@
                                                 <TextBox
                                                     Margin="0,5,0,0"
                                                     Padding="2"
+                                                    AcceptsReturn="True"
                                                     Background="{StaticResource ControlBackgroundBrush}"
                                                     BorderThickness="0"
                                                     FontSize="{StaticResource CommonFontSize}"
@@ -339,6 +372,7 @@
                                             <TextBox
                                                 Margin="0,5,0,0"
                                                 Padding="2"
+                                                AcceptsReturn="True"
                                                 Background="{StaticResource ControlBackgroundBrush}"
                                                 BorderThickness="0"
                                                 FontSize="{StaticResource CommonFontSize}"
@@ -398,6 +432,27 @@
                             Grid.Row="0"
                             Height="180"
                             Source="{Binding ImageSource}" />
+
+
+                        <Border
+                            Grid.Row="0"
+                            Width="100"
+                            Margin="3"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Background="{StaticResource AlternationBackgroundBrush}"
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Opacity="0.85">
+
+                            <TextBlock
+                                Padding="4,2"
+                                HorizontalAlignment="Center"
+                                FontSize="{StaticResource CommonFontSize}"
+                                Foreground="{StaticResource AppForegroundBrush}"
+                                Text="{Binding Resolution}" />
+                        </Border>
                         <TextBlock
                             Grid.Row="1"
                             Width="240"

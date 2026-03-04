@@ -12,6 +12,7 @@ namespace MetadataEditor.Models
         private string metadataText;
         private bool isModified;
         private string caption = string.Empty;
+        private bool hasMetadata;
 
         public ImageItem(string path)
         {
@@ -20,6 +21,10 @@ namespace MetadataEditor.Models
 
             // Load image into memory without locking the file
             ImageSource = LoadBitmapImage(path);
+            if (ImageSource is BitmapImage bitmap)
+            {
+                Resolution = $"{bitmap.PixelWidth} x {bitmap.PixelHeight}";
+            }
 
             MetadataText = PngMetadataReader.ReadPngTextMetadata(path);
             IsModified = false;
@@ -40,6 +45,8 @@ namespace MetadataEditor.Models
                 {
                     IsModified = true;
                 }
+
+                HasMetadata = !string.IsNullOrWhiteSpace(metadataText);
             }
         }
 
@@ -50,6 +57,10 @@ namespace MetadataEditor.Models
         }
 
         public string Caption { get => caption; set => SetProperty(ref caption, value); }
+
+        public string Resolution { get; set; } = string.Empty;
+
+        public bool HasMetadata { get => hasMetadata; set => SetProperty(ref hasMetadata, value); }
 
         public ObservableCollection<Diff> Diffs { get; set; } = new ();
 
