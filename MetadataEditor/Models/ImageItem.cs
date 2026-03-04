@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -13,6 +12,7 @@ namespace MetadataEditor.Models
         private string metadataText;
         private bool isModified;
         private string caption = string.Empty;
+        private bool hasMetadata;
 
         public ImageItem(string path)
         {
@@ -45,6 +45,8 @@ namespace MetadataEditor.Models
                 {
                     IsModified = true;
                 }
+
+                HasMetadata = !string.IsNullOrWhiteSpace(metadataText);
             }
         }
 
@@ -57,6 +59,8 @@ namespace MetadataEditor.Models
         public string Caption { get => caption; set => SetProperty(ref caption, value); }
 
         public string Resolution { get; set; } = string.Empty;
+
+        public bool HasMetadata { get => hasMetadata; set => SetProperty(ref hasMetadata, value); }
 
         public ObservableCollection<Diff> Diffs { get; set; } = new ();
 
