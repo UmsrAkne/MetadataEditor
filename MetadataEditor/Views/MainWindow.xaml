@@ -304,9 +304,13 @@
         </DockPanel>
 
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid
+            Grid.Row="1"
+            Grid.Column="1"
+            Background="{StaticResource ControlBackgroundBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -321,8 +325,27 @@
                 Text="{Binding SelectedImageItem.MetadataText, UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="Wrap" />
 
-            <Border
+            <StackPanel
                 Grid.Row="1"
+                HorizontalAlignment="Right"
+                Background="{StaticResource ControlBackgroundBrush}"
+                Orientation="Horizontal">
+
+                <Button
+                    Margin="10,2"
+                    Padding="10,3"
+                    Command="{Binding CopyPromptCommand}"
+                    Content="Copy Positive Prompt" />
+                <Button
+                    Margin="10,2"
+                    Padding="10,3"
+                    Command="{Binding CopyNegativePromptCommand}"
+                    Content="Copy Negative Prompt" />
+
+            </StackPanel>
+
+            <Border
+                Grid.Row="2"
                 Background="{StaticResource AlternationBackgroundBrush}"
                 DockPanel.Dock="Bottom">
                 <Grid>
