@@ -149,6 +149,16 @@ public class MainWindowViewModel : BindableBase
         SelectedImageItem.Diffs.Add(new Diff());
     });
 
+    public DelegateCommand CopyPromptCommand => new DelegateCommand(() =>
+    {
+        PromptExtractor.ExtractAndCopy(SelectedImageItem?.MetadataText, true);
+    });
+
+    public DelegateCommand CopyNegativePromptCommand => new DelegateCommand(() =>
+    {
+        PromptExtractor.ExtractAndCopy(SelectedImageItem?.MetadataText, false);
+    });
+
     public void Add(string path)
     {
         ImageItems.Add(new ImageItem(path));
